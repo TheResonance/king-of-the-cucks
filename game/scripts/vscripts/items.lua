@@ -1,14 +1,14 @@
 --[[ items.lua ]]
 
 --Spawns Bags of Gold in the middle
-function COverthrowGameMode:ThinkGoldDrop()
+function KOTC:ThinkGoldDrop()
 	local r = RandomInt( 1, 100 )
 	if r > ( 100 - self.m_GoldDropPercent ) then
 		self:SpawnGold()
 	end
 end
 
-function COverthrowGameMode:SpawnGold()
+function KOTC:SpawnGold()
 	local overBoss = Entities:FindByName( nil, "@overboss" )
 	local throwCoin = nil
 	local throwCoin2 = nil
@@ -27,7 +27,7 @@ function COverthrowGameMode:SpawnGold()
 	end
 end
 
-function COverthrowGameMode:SpawnGoldEntity( spawnPoint )
+function KOTC:SpawnGoldEntity( spawnPoint )
 	EmitGlobalSound("Item.PickUpGemWorld")
 	local newItem = CreateItem( "item_bag_of_gold", nil, nil )
 	local drop = CreateItemOnPositionForLaunch( spawnPoint, newItem )
@@ -38,7 +38,7 @@ end
 
 
 --Removes Bags of Gold after they expire
-function COverthrowGameMode:KillLoot( item, drop )
+function KOTC:KillLoot( item, drop )
 
 	if drop:IsNull() then
 		return
@@ -54,7 +54,7 @@ function COverthrowGameMode:KillLoot( item, drop )
 	UTIL_Remove( drop )
 end
 
-function COverthrowGameMode:SpecialItemAdd( event )
+function KOTC:SpecialItemAdd( event )
 	local item = EntIndexToHScript( event.ItemEntityIndex )
 	local owner = EntIndexToHScript( event.HeroEntityIndex )
 	local hero = owner:GetClassname()
@@ -181,7 +181,7 @@ function COverthrowGameMode:SpecialItemAdd( event )
 	CustomGameEventManager:Send_ServerToAllClients( "overthrow_item_drop", overthrow_item_drop )
 end
 
-function COverthrowGameMode:ThinkSpecialItemDrop()
+function KOTC:ThinkSpecialItemDrop()
 	-- Stop spawning items after 15
 	if self.nNextSpawnItemNumber >= 15 then
 		return
@@ -206,7 +206,7 @@ function COverthrowGameMode:ThinkSpecialItemDrop()
 	end
 end
 
-function COverthrowGameMode:PlanNextSpawn()
+function KOTC:PlanNextSpawn()
 	local missingSpawnPoint =
 	{
 		origin = "0 0 384",
@@ -234,7 +234,7 @@ function COverthrowGameMode:PlanNextSpawn()
 	self.itemSpawnIndex = r
 end
 
-function COverthrowGameMode:WarnItem()
+function KOTC:WarnItem()
 	-- find the spawn point
 	self:PlanNextSpawn()
 
@@ -255,7 +255,7 @@ function COverthrowGameMode:WarnItem()
 	visionRevealer:SetContextThink( "KillVisionParticle", function() return trueSight:RemoveSelf() end, 35 )
 end
 
-function COverthrowGameMode:SpawnItem()
+function KOTC:SpawnItem()
 	-- notify everyone
 	CustomGameEventManager:Send_ServerToAllClients( "item_has_spawned", {} )
 	EmitGlobalSound( "powerup_05" )
@@ -273,12 +273,12 @@ function COverthrowGameMode:SpawnItem()
 	treasureCourier:Attribute_SetIntValue( "particleID", particleTreasure )
 end
 
-function COverthrowGameMode:ForceSpawnItem()
+function KOTC:ForceSpawnItem()
 	self:WarnItem()
 	self:SpawnItem()
 end
 
-function COverthrowGameMode:KnockBackFromTreasure( center, radius, knockback_duration, knockback_distance, knockback_height )
+function KOTC:KnockBackFromTreasure( center, radius, knockback_duration, knockback_distance, knockback_height )
 	local targetType = bit.bor( DOTA_UNIT_TARGET_CREEP, DOTA_UNIT_TARGET_HERO )
 	local knockBackUnits = FindUnitsInRadius( DOTA_TEAM_NOTEAM, center, nil, radius, DOTA_UNIT_TARGET_TEAM_BOTH, targetType, DOTA_UNIT_TARGET_FLAG_NONE, FIND_ANY_ORDER, false )
  
@@ -300,7 +300,7 @@ function COverthrowGameMode:KnockBackFromTreasure( center, radius, knockback_dur
 end
 
 
-function COverthrowGameMode:TreasureDrop( treasureCourier )
+function KOTC:TreasureDrop( treasureCourier )
 	--Create the death effect for the courier
 	local spawnPoint = treasureCourier:GetInitialGoalEntity():GetAbsOrigin()
 	spawnPoint.z = 400
@@ -328,7 +328,6 @@ function COverthrowGameMode:TreasureDrop( treasureCourier )
 	UTIL_Remove( treasureCourier )
 end
 
-function COverthrowGameMode:ForceSpawnGold()
+function KOTC:ForceSpawnGold()
 	self:SpawnGold()
 end
-

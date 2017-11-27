@@ -3,7 +3,7 @@
 ---------------------------------------------------------------------------
 -- Event: Game state change handler
 ---------------------------------------------------------------------------
-function COverthrowGameMode:OnGameRulesStateChange()
+function KOTC:OnGameRulesStateChange()
 	local nNewState = GameRules:State_Get()
 	--print( "OnGameRulesStateChange: " .. nNewState )
 
@@ -33,7 +33,7 @@ end
 --------------------------------------------------------------------------------
 -- Event: OnNPCSpawned
 --------------------------------------------------------------------------------
-function COverthrowGameMode:OnNPCSpawned( event )
+function KOTC:OnNPCSpawned( event )
 	local spawnedUnit = EntIndexToHScript( event.entindex )
 	if spawnedUnit:IsRealHero() then
 		-- Destroys the last hit effects
@@ -57,7 +57,7 @@ end
 --------------------------------------------------------------------------------
 -- Event: BountyRunePickupFilter
 --------------------------------------------------------------------------------
-function COverthrowGameMode:BountyRunePickupFilter( filterTable )
+function KOTC:BountyRunePickupFilter( filterTable )
       filterTable["xp_bounty"] = 2*filterTable["xp_bounty"]
       filterTable["gold_bounty"] = 2*filterTable["gold_bounty"]
       return true
@@ -66,7 +66,7 @@ end
 ---------------------------------------------------------------------------
 -- Event: OnTeamKillCredit, see if anyone won
 ---------------------------------------------------------------------------
-function COverthrowGameMode:OnTeamKillCredit( event )
+function KOTC:OnTeamKillCredit( event )
 --	print( "OnKillCredit" )
 --	DeepPrint( event )
 
@@ -104,7 +104,7 @@ end
 ---------------------------------------------------------------------------
 -- Event: OnEntityKilled
 ---------------------------------------------------------------------------
-function COverthrowGameMode:OnEntityKilled( event )
+function KOTC:OnEntityKilled( event )
 	local killedUnit = EntIndexToHScript( event.entindex_killed )
 	local killedTeam = killedUnit:GetTeam()
 	local hero = EntIndexToHScript( event.entindex_attacker )
@@ -164,15 +164,15 @@ function COverthrowGameMode:OnEntityKilled( event )
 				--print("Set time for Wraith King respawn disabled")
 				return nil
 			else
-				COverthrowGameMode:SetRespawnTime( killedTeam, killedUnit, extraTime )
+				KOTC:SetRespawnTime( killedTeam, killedUnit, extraTime )
 			end
 		else
-			COverthrowGameMode:SetRespawnTime( killedTeam, killedUnit, extraTime )
+			KOTC:SetRespawnTime( killedTeam, killedUnit, extraTime )
 		end
 	end
 end
 
-function COverthrowGameMode:SetRespawnTime( killedTeam, killedUnit, extraTime )
+function KOTC:SetRespawnTime( killedTeam, killedUnit, extraTime )
 	--print("Setting time for respawn")
 	if killedTeam == self.leadingTeam and self.isGameTied == false then
 		killedUnit:SetTimeUntilRespawn( 20 + extraTime )
@@ -185,7 +185,7 @@ end
 --------------------------------------------------------------------------------
 -- Event: OnItemPickUp
 --------------------------------------------------------------------------------
-function COverthrowGameMode:OnItemPickUp( event )
+function KOTC:OnItemPickUp( event )
 	local item = EntIndexToHScript( event.ItemEntityIndex )
 	local owner = EntIndexToHScript( event.HeroEntityIndex )
 	r = 300
@@ -198,7 +198,7 @@ function COverthrowGameMode:OnItemPickUp( event )
 	elseif event.itemname == "item_treasure_chest" then
 		--print("Special Item Picked Up")
 		DoEntFire( "item_spawn_particle_" .. self.itemSpawnIndex, "Stop", "0", 0, self, self )
-		COverthrowGameMode:SpecialItemAdd( event )
+		KOTC:SpecialItemAdd( event )
 		UTIL_Remove( item ) -- otherwise it pollutes the player inventory
 	end
 end
@@ -207,9 +207,9 @@ end
 --------------------------------------------------------------------------------
 -- Event: OnNpcGoalReached
 --------------------------------------------------------------------------------
-function COverthrowGameMode:OnNpcGoalReached( event )
+function KOTC:OnNpcGoalReached( event )
 	local npc = EntIndexToHScript( event.npc_entindex )
 	if npc:GetUnitName() == "npc_dota_treasure_courier" then
-		COverthrowGameMode:TreasureDrop( npc )
+		KOTC:TreasureDrop( npc )
 	end
 end
