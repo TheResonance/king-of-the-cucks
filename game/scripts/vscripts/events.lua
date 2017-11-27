@@ -26,6 +26,7 @@ function COverthrowGameMode:OnGameRulesStateChange()
 		CustomGameEventManager:Send_ServerToAllClients( "show_timer", {} )
 		DoEntFire( "center_experience_ring_particles", "Start", "0", 0, self, self  )
 		GameRules:SendCustomMessage( "Welcome to <font color='#FF0000'>King of the Cucks</font>", 0, 0 )
+		GameRules:SendCustomMessage( "Version: <font color='#00FF00'>" .. VERSION .. "</font>", 0, 0 )
 	end
 end
 

@@ -4,7 +4,7 @@ Overthrow Game Mode
 
 _G.nNEUTRAL_TEAM = 4
 _G.nCOUNTDOWNTIMER = 1000
-
+_G.VERSION = "0.0.1"
 
 ---------------------------------------------------------------------------
 -- COverthrowGameMode class
@@ -176,7 +176,6 @@ function COverthrowGameMode:InitGameMode()
 	GameRules:GetGameModeEntity():SetFountainConstantManaRegen( 0 )
 	GameRules:GetGameModeEntity():SetBountyRunePickupFilter( Dynamic_Wrap( COverthrowGameMode, "BountyRunePickupFilter" ), self )
 	GameRules:GetGameModeEntity():SetExecuteOrderFilter( Dynamic_Wrap( COverthrowGameMode, "ExecuteOrderFilter" ), self )
-
 
 	ListenToGameEvent( "game_rules_state_change", Dynamic_Wrap( COverthrowGameMode, 'OnGameRulesStateChange' ), self )
 	ListenToGameEvent( "npc_spawned", Dynamic_Wrap( COverthrowGameMode, "OnNPCSpawned" ), self )
